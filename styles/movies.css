@@ -49,7 +49,10 @@
 
     position: relative;
 
-    background: black;
+    /* background: black; */
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
 }
 
 .movies li:not(:first-child) { /*Every li will have margin-top except the first child*/
