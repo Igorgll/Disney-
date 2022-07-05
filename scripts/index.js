@@ -5,38 +5,45 @@ const BASE_URL_IMAGE = {
     small:'https://image.tmdb.org/t/p/w500'
 }
 
-const LIST_MOVIES = ['tt12801262', 'tt2948372', 'tt7146812', 'tt3521164', 'tt2948356', 'tt2096673', 'tt2380307', 'tt1049413', 'tt2953050', 'tt8097030', 'tt4823776']
+const movies = []
+const moviesElement = document.getElementById('movies')
 
 function getUrlMovie(movieId) {
     return `https://api.themoviedb.org/3/movie/${movieId}?api_key=${API_KEY}&language=${API_LANGUAGE}`
 }
 
-function setFeaturedMovie(movieId) {
-    fetch(getUrlMovie(movieId)).then(response => response.json()).then(data => {
-    console.log(data)
+function changeButtonMenu() {
+    const button = document.querySelector('.button__menu')
+    const navigation = document.querySelector('.navigation')
+
+    button.classList.toggle('active')
+    navigation.classList.toggle('active')
+}
+
+function setFeaturedMovie(movie) {
     const appImage = document.querySelector('.app__image img')
     const title = document.querySelector('.featured__movie h1')
     const description = document.querySelector('.featured__movie p')
     const info = document.querySelector('.featured__movie span')
     const rating = document.querySelector('.rating strong')
 
-    const yearRelease = data.release_date.split('-')[0]
+    title.innerHTML = movie.title
+    description.innerHTML = movie.overview
+    rating.innerHTML = movie.vote_average
+    info.innerHTML = movie.release + ' - ' + movie.genre + ' - Movie'
 
-    title.innerHTML = data.title
-    description.innerHTML = data.overview
-    rating.innerHTML = data.vote_average
-    info.innerHTML = yearRelease + ' - ' + data.genres[0].name + ' - Movie'
-
-    const image = BASE_URL_IMAGE.original.concat(data.backdrop_path)
-    appImage.setAttribute('src', image)
-})
+    appImage.setAttribute('src', movie.image.original)
 }
 
-const moviesList = document.getElementById('movies__list')
+function changeMainMove(movieId) {
+    const movie = movies.find(movie => movie.id === movieId)
+    setFeaturedMovie(movie)
+    changeButtonMenu()
+}
 
 function createButtonMovie(movieId) {
     const button = document.createElement('button')
-    button.setAttribute('onClick', `setFeaturedMovie('${movieId}')`)
+    button.setAttribute('onClick', `changeMainMove('${movieId}')`)
     button.innerHTML = `<img src="/assets/icon-play-button.png" alt="Icon play button" />`
     
     return button
@@ -56,27 +63,49 @@ function createImageMovie(movieImage, movieTitle) {
     return divImageMovie
 }
 
-function createMovie(movieId) {
-    console.log('createMovie id', movieId)
-    fetch(getUrlMovie(movieId)).then(response => response.json()).then(data => {
-        const movie = document.createElement('li')
-        movie.classList.add('movie')
-        const genre = `<span>${data.genres[0].name}</span>`
-        const title = `<strong>${data.title}</strong>`
-        const image = BASE_URL_IMAGE.small.concat(data.backdrop_path)
+function addMovieInList(movie) {
+        const movieElement = document.createElement('li')
+        movieElement.classList.add('movie')
 
-        movie.innerHTML = genre + title
-        movie.appendChild(createButtonMovie(movieId))
-        movie.appendChild(createImageMovie(image, data.title))
+        movieElement.setAttribute('id', movie.id)
+        
+        const genre = `<span>${movie.genre}</span>`
+        const title = `<strong>${movie.title}</strong>`
 
-        moviesList.appendChild(movie)
+        movieElement.innerHTML = genre + title
+        movieElement.appendChild(createButtonMovie(movie.id))
+        movieElement.appendChild(createImageMovie(movie.image.small, movie.title))
+
+        moviesElement.appendChild(movieElement)
+}
+
+function loadMovies() {
+    const LIST_MOVIES = ['tt12801262', 'tt7146812','tt2096673', 'tt2380307', 'tt1049413', 'tt2953050', 'tt8097030', 'tt4823776']
+    LIST_MOVIES.map((movie, index) => {
+        fetch(getUrlMovie(movie)).then(response => response.json()).then(data => {
+            
+            const movieData = {
+                id: movie,
+                title: data.title,
+                overview: data.overview,
+                vote_average: data.vote_average,
+                genre: data.genres[0].name,
+                release: data.release_date.split('-')[0],
+                image: {
+                    original: BASE_URL_IMAGE.original.concat(data.backdrop_path),
+                    small: BASE_URL_IMAGE.small.concat(data.backdrop_path)
+                }
+            }
+            movies.push(movieData)
+
+            if(index === 0) {
+                setFeaturedMovie(movieData)
+            }
+
+            addMovieInList(movieData)
+        })
     })
 }
 
-function loadListMovies() {
-    LIST_MOVIES.map(createMovie)
-}
+loadMovies()
 
-loadListMovies()
-
-setFeaturedMovie(LIST_MOVIES[0])
