@@ -60,3 +60,54 @@
 .featured__movie button:hover {
     filter: brightness(0.85);
 }
+
+@media (max-width: 768px) {
+    .featured__movie h1 {
+        font-size: 2.5rem;
+        line-height: 3.25rem;
+    }
+    .featured__movie button {
+        width: 240px;
+        height: 60px;
+    }
+
+    .featured__movie button img {
+        width: 16px;
+        height: auto;
+    }
+}
+
+@media (max-width: 650px) {
+    .featured__movie h1 {
+        font-size: 2rem;
+        line-height: 2.5rem;
+    }
+    
+    .featured__movie {
+        row-gap: 8px;
+    }
+    
+    .featured__movie p {
+        font-size: 1rem;
+        line-height: 1.5rem;
+    
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: 6;
+                line-clamp: 6; 
+        -webkit-box-orient: vertical;
+    }
+
+    .featured__movie button {
+        width: 175px;
+        height: 48px;
+        font-size: 0.875rem;
+
+        padding: 0 32px;
+    }
+
+    .featured__movie button img {
+        width: 14px;
+    }
+}

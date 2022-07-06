@@ -10,8 +10,10 @@
     background: #093F7A;
 
     padding-top: 66px;
+    padding-bottom: 32px;
     padding-left: 54px;
     padding-right: 80px;
+    overflow: auto;
 }
 
 .navigation.active {
@@ -22,4 +24,29 @@
     font-size: 1.75rem;
     line-height: 2.125rem;
     font-weight: 700;    
+}
+
+@media (max-height: 750px) {
+    .navigation {
+        padding: 70px 40px 40px;
+        overflow: scroll;
+    }
+}
+
+@media (max-width: 768px) {
+    .navigation {
+        width: 100vw;
+        right: -100vw;
+    }
+
+    .navigation.active {
+        transform: translateX(-100vw);
+    }
+}
+
+@media (max-width: 650px) {
+    .navigation {
+        padding: 44px 24px 24px;
+    }
+
 }
