@@ -17,8 +17,6 @@ Deploy do projeto: [Disney+](https://igordisneyplus.netlify.app/)
 - JavaScript
 - [API TMDB](https://www.themoviedb.org/documentation/api)
 
-## Deploy: https://igordisneyplus.netlify.app/
-
 ![Imgur](https://i.imgur.com/sP5jUWy.png)
 
 ![Imgur](https://i.imgur.com/sMV8lnz.png)
